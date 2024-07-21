@@ -12,7 +12,7 @@ let userSchema = new mongoose.Schema({
         select: false
     },
     created_at: {
-        type:String
+        type:Date
     }
 }, {toJSON:{virtuals:true}, toObject:{virtuals:true}})
 

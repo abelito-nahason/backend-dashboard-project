@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const Product = require('../models/Product')
 const verifyAuth = require('../middleware/verifyAuth')
+const convertDateString = require('../util/convertDateString')
 
 router.post('/product', verifyAuth, async (req,res) => {
     try {
@@ -46,7 +47,7 @@ router.get('/product', verifyAuth, async (req,res) => {
                                                             productVendor: {$regex: productVendor, $options: 'i'}})
 
         const products = await Product.find({productName : {$regex: productName, $options: 'i'}, 
-                                             productVendor: {$regex: productVendor, $options: 'i'}}).skip(offset).limit(pageSize)
+                                             productVendor: {$regex: productVendor, $options: 'i'}}).sort({created_at: -1}).skip(offset).limit(pageSize)
 
         return res.status(200).json({ 
             results: products.map((product) => ({
@@ -54,8 +55,8 @@ router.get('/product', verifyAuth, async (req,res) => {
                 productName: product.productName,
                 productVendor: product.productVendor,
                 productPrice: product.productPrice,
-                created_at : product.created_at, 
-                updated_at : product.updated_at
+                created_at : convertDateString(product.created_at), 
+                updated_at : product.updated_at ? convertDateString(product.updated_at) : "-"
             })),
             totalRows: totalProducts || 0
         })

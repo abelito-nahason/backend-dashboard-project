@@ -11,8 +11,8 @@ productSchema = new mongoose.Schema({
         required: true
     },
     productVendor: String,
-    created_at: String,
-    updated_at:String,
+    created_at:Date,
+    updated_at:Date,
 
 }, {toJSON: {virtuals: true}, toObject:{virtuals: true}})
 
